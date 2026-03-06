@@ -38,13 +38,13 @@ jobs:
 
       - name: Build Android APK
         run: |
-          cd /github/workspace
           godot --headless --build-solutions --quit
           godot --headless --export-release "Android" build/idle-block-game.apk
+        working-directory: ${{ github.workspace }}
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: build/idle-block-game.apk
+          path: ${{ github.workspace }}/build/idle-block-game.apk
           retention-days: 30
