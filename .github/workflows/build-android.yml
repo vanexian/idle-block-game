@@ -31,10 +31,10 @@ jobs:
         run: |
           echo y | sdkmanager --licenses || true
 
-      - name: Install Xvfb
+      - name: Install Xvfb and X11 libs
         run: |
           apt-get update -qq
-          apt-get install -y -qq xvfb
+          apt-get install -y -qq xvfb libxcursor1 libxrandr2 libxi6 libxinerama1
 
       - name: Import project
         run: |
@@ -46,8 +46,8 @@ jobs:
           Xvfb :99 -screen 0 1024x768x24 &
           export DISPLAY=:99
           sleep 2
-          godot --build-solutions --quit
-          godot --export-release "Android" build/idle-block-game.apk
+          godot --rendering-driver opengl3 --build-solutions --quit
+          godot --rendering-driver opengl3 --export-release "Android" build/idle-block-game.apk
         working-directory: ${{ github.workspace }}
 
       - name: Upload APK
