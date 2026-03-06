@@ -31,6 +31,11 @@ jobs:
         run: |
           echo y | sdkmanager --licenses || true
 
+      - name: Install Xvfb
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq xvfb
+
       - name: Import project
         run: |
           mkdir -p ~/.local/share/godot/export_templates
@@ -38,8 +43,11 @@ jobs:
 
       - name: Build Android APK
         run: |
-          godot --headless --build-solutions --quit
-          godot --headless --export-release "Android" build/idle-block-game.apk
+          Xvfb :99 -screen 0 1024x768x24 &
+          export DISPLAY=:99
+          sleep 2
+          godot --build-solutions --quit
+          godot --export-release "Android" build/idle-block-game.apk
         working-directory: ${{ github.workspace }}
 
       - name: Upload APK
