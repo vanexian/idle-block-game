@@ -23,11 +23,13 @@ jobs:
         run: |
           mkdir -p ~/.android
           touch ~/.android/repositories.cfg
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0" <<< y
+          echo y | sdkmanager "platform-tools"
+          echo y | sdkmanager "platforms;android-34"
+          echo y | sdkmanager "build-tools;34.0.0"
 
       - name: Accept Android Licenses
         run: |
-          yes | sdkmanager --licenses || true
+          echo y | sdkmanager --licenses || true
 
       - name: Import project
         run: |
