@@ -1,0 +1,46 @@
+name: Godot Android Build
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.4
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Android
+        run: |
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+          yes | sdkmanager --platform-tools
+          yes | sdkmanager "platforms;android-34"
+          yes | sdkmanager "build-tools;34.0.0"
+
+      - name: Import project
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates
+          cp -r /root/.local/share/godot/export_templates/4.4.stable ~/.local/share/godot/export_templates/
+
+      - name: Build Android APK
+        run: |
+          cd /github/workspace
+          godot --headless --build-solutions --quit
+          godot --headless --export-release "Android" build/idle-block-game.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: build/idle-block-game.apk
+          retention-days: 30

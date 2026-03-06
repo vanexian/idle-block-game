@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://resource_display_001"]
+
+[sub_resource type="GDScript" id="GDScript_resource_display"]
+script/source = "extends HBoxContainer
+
+@onready var coins_label = $CoinsLabel
+@onready var diamonds_label = $DiamondsLabel
+@onready var dps_label = $DPSLabel
+
+func _ready():
+    update_resources(0, 0, 0.0)
+
+func update_resources(coins: int, diamonds: int, dps: float):
+    coins_label.text = \"🪙 \" + str(coins)
+    diamonds_label.text = \"💎 \" + str(diamonds)
+    dps_label.text = \"⚡ \" + str(dps) + \"/秒\"
+"
+
+[node name="ResourceDisplay" type="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 30
+
+[node name="CoinsLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "🪙 0"
+
+[node name="DiamondsLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "💎 0"
+
+[node name="DPSLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "⚡ 0/秒"
+
+[node name="Script" type="GDScript" parent="."]
+script = SubResource("GDScript_resource_display")
