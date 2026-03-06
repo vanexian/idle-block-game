@@ -23,7 +23,7 @@ jobs:
         run: |
           mkdir -p ~/.android
           touch ~/.android/repositories.cfg
-          yes | sdkmanager --platform-tools
+          yes | sdkmanager "platform-tools"
           yes | sdkmanager "platforms;android-34"
           yes | sdkmanager "build-tools;34.0.0"
 
